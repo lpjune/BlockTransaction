@@ -1,0 +1,22 @@
+extends layout
+
+block content
+
+  h1 #{hash}: #{block.hash}
+
+  p #[strong prevHash:] #{block.prevHash}
+  p #[strong Cost:] #{block.cost}
+  p #[strong First Name:] #{block.firstName}
+  p #[strong Last Name:] #{block.lastName}
+  p #[strong Date:] #{block.date}
+
+  hr
+
+
+  p Do you really want to delete this Block?
+
+  form(method='POST' action='')
+    div.form-group
+      input#id.form-control(type='hidden' name='id' required='true', value=block._id )
+
+    button.btn.btn-primary(type='submit') Delete

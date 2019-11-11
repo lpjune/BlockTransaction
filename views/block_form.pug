@@ -1,0 +1,30 @@
+extends layout
+
+block content
+  h1= hash
+
+  form(method='POST' action='')
+    div.form-group
+      label(for='hash') Hash:
+      input#hash.form-control(type='text' placeholder='Hash' name='hash' required='true' value=(undefined===block ? '' : block.hash) )
+    div.form-group
+      label(for='prevHash') prevHash:
+      input#prevHash.form-control(type='textarea' placeholder='Previous Hash' name='prevHash' value=(undefined===block ? '' : block.prevHash) required='true')
+    div.form-group
+      label(for='cost') Cost:
+      input#cost.form-control(type='text' placeholder='Cost' name='cost' value=(undefined===block ? '' : block.cost) required='true') 
+    div.form-group
+      label(for='firstName') First Name:
+      input#firstName.form-control(type='text' placeholder='First Name' name='firstName' value=(undefined===block ? '' : block.firstName) required='true') 
+    div.form-group
+      label(for='lastName') Last Name:
+      input#lastName.form-control(type='text' placeholder='Last Name' name='lastName' value=(undefined===block ? '' : block.lastName) required='true')
+    div.form-group
+      label(for='date') Date:
+      input#date.form-control(type='text' placeholder='Date' name='date' value=(undefined===block ? '' : block.date) required='true')
+    button.btn.btn-primary(type='submit') Submit
+
+  if errors 
+    ul
+      for error in errors
+        li!= error.msg
