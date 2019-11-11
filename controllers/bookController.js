@@ -1,6 +1,5 @@
 var Book = require('../models/book');
 var Genre = require('../models/genre');
-var BookInstance = require('../models/bookinstance');
 
 const { body,validationResult } = require('express-validator/check');
 const { sanitizeBody } = require('express-validator/filter');
@@ -12,12 +11,6 @@ exports.index = function(req, res) {
     async.parallel({
         book_count: function(callback) {
             Book.count(callback);
-        },
-        book_instance_count: function(callback) {
-            BookInstance.count(callback);
-        },
-        book_instance_available_count: function(callback) {
-            BookInstance.count({status:'Available'},callback);
         },
         genre_count: function(callback) {
             Genre.count(callback);
@@ -50,11 +43,6 @@ exports.book_detail = function(req, res, next) {
               .populate('genre')
               .exec(callback);
         },
-        book_instance: function(callback) {
-
-          BookInstance.find({ 'book': req.params.id })
-          .exec(callback);
-        },
     }, function(err, results) {
         if (err) { return next(err); }
         if (results.book==null) { // No results.
@@ -63,7 +51,7 @@ exports.book_detail = function(req, res, next) {
             return next(err);
         }
         // Successful, so render.
-        res.render('book_detail', { title: 'Title', book:  results.book, book_instances: results.book_instance } );
+        res.render('book_detail', { title: 'Title', book:  results.book, } );
     });
 
 };
@@ -160,16 +148,13 @@ exports.book_delete_get = function(req, res, next) {
         book: function(callback) {
             Book.findById(req.params.id).populate('genre').exec(callback);
         },
-        book_bookinstances: function(callback) {
-            BookInstance.find({ 'book': req.params.id }).exec(callback);
-        },
     }, function(err, results) {
         if (err) { return next(err); }
         if (results.book==null) { // No results.
             res.redirect('/catalog/books');
         }
         // Successful, so render.
-        res.render('book_delete', { title: 'Delete Book', book: results.book, book_instances: results.book_bookinstances } );
+        res.render('book_delete', { title: 'Delete Book', book: results.book, } );
     });
 
 };
@@ -183,17 +168,9 @@ exports.book_delete_post = function(req, res, next) {
         book: function(callback) {
             Book.findById(req.body.id).populate('genre').exec(callback);
         },
-        book_bookinstances: function(callback) {
-            BookInstance.find({ 'book': req.body.id }).exec(callback);
-        },
     }, function(err, results) {
         if (err) { return next(err); }
         // Success
-        if (results.book_bookinstances.length > 0) {
-            // Book has book_instances. Render in same way as for GET route.
-            res.render('book_delete', { title: 'Delete Book', book: results.book, book_instances: results.book_bookinstances } );
-            return;
-        }
         else {
             // Book has no BookInstance objects. Delete object and redirect to the list of books.
             Book.findByIdAndRemove(req.body.id, function deleteBook(err) {
