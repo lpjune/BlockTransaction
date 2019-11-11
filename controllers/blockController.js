@@ -22,9 +22,59 @@ exports.index = function(req, res) {
   );
 };
 
-// Display list of all blocks.
+// Display list of all blocks sorted by hash.
 exports.block_list = function(req, res, next) {
-  Block.find({}, "hash").exec(function(err, list_blocks) {
+  Block.find({})
+  .exec(function(err, list_blocks) {
+    if (err) {
+      return next(err);
+    }
+    list_blocks.sort(function(a, b) {
+      let textA = a.hash.toUpperCase();
+      let textB = b.hash.toUpperCase();
+      return textA < textB ? -1 : textA > textB ? 1 : 0;
+    });
+    // Successful, so render
+    res.render("block_list", { hash: "Block List", block_list: list_blocks });
+  });
+};
+
+// Display list of all blocks sorted by date.
+exports.block_list_date = function(req, res, next) {
+  Block.find({})
+  .sort({ date: "desc" })
+  .exec(function(err, list_blocks) {
+    if (err) {
+      return next(err);
+    }
+    // Successful, so render
+    res.render("block_list", { hash: "Block List", block_list: list_blocks });
+  });
+};
+
+// Display list of all blocks sorted by last name.
+exports.block_list_name = function(req, res, next) {
+  Block.find({})
+  .exec(function(err, list_blocks) {
+    if (err) {
+      return next(err);
+    }
+    list_blocks.sort(function(a, b) {
+      let textA = a.lastName.toUpperCase();
+      let textB = b.lastName.toUpperCase();
+      return textA < textB ? -1 : textA > textB ? 1 : 0;
+    });
+    // Successful, so render
+    res.render("block_list", { hash: "Block List", block_list: list_blocks });
+  });
+};
+
+// Display list of all blocks sorted by cost.
+exports.block_list_cost = function(req, res, next) {
+  Block.find({})
+  .sort({cost: "asc"})
+  .collation({ locale: "en_US", numericOrdering: true })
+  .exec(function(err, list_blocks) {
     if (err) {
       return next(err);
     }
@@ -103,7 +153,7 @@ exports.block_create_post = [
       cost: req.body.cost,
       firstName: req.body.firstName,
       lastName: req.body.lastName,
-      date: req.body.date,
+      date: req.body.date
     });
 
     if (!errors.isEmpty()) {
@@ -151,7 +201,10 @@ exports.block_delete_get = function(req, res, next) {
         res.redirect("/catalog/blocks");
       }
       // Successful, so render.
-      res.render("block_delete", { hash: "Delete Block", block: results.block });
+      res.render("block_delete", {
+        hash: "Delete Block",
+        block: results.block
+      });
     }
   );
 };
@@ -246,7 +299,7 @@ exports.block_update_post = [
 
     // Create a Block object with escaped/trimmed data and old id.
     var block = new Block({
-      _id:req.params.id, 
+      _id: req.params.id,
       hash: req.body.hash,
       prevHash: req.body.prevHash,
       cost: req.body.cost,
@@ -272,12 +325,15 @@ exports.block_update_post = [
       return;
     } else {
       // Data from form is valid. Update the record.
-      Block.findByIdAndUpdate(req.params.id, block, {}, function(err, theblock) {
+      Block.findByIdAndUpdate(req.params.id, block, {}, function(
+        err,
+        theblock
+      ) {
         if (err) {
           return next(err);
         }
         // Successful - redirect to block detail page.
-        res.redirect(theblock.url);
+        res.redirect(block.url);
       });
     }
   }

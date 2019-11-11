@@ -7,7 +7,7 @@ var block_controller = require("../controllers/blockController");
 /// BOOK ROUTES ///
 
 // GET catalog home page.
-router.get("/", block_controller.index);
+router.get("/", block_controller.block_list);
 
 // GET request for creating a Block. NOTE This must come before routes that display Block (uses id).
 router.get("/block/create", block_controller.block_create_get);
@@ -32,5 +32,14 @@ router.get("/block/:id", block_controller.block_detail);
 
 // GET request for list of all Block.
 router.get("/blocks", block_controller.block_list);
+
+// GET request for list of all Block sorted by date
+router.get("/blocks/date", block_controller.block_list_date);
+
+// GET request for list of all Block sorted by name
+router.get("/blocks/name", block_controller.block_list_name);
+
+// GET request for list of all Block sorted by cost
+router.get("/blocks/cost", block_controller.block_list_cost);
 
 module.exports = router;
