@@ -3,9 +3,9 @@ var mongoose = require("mongoose");
 var Schema = mongoose.Schema;
 
 var BlockSchema = new Schema({
-  title: { type: String, required: true },
-  summary: { type: String, required: true },
-  isbn: { type: String, required: true }
+  hash: { type: String, required: true },
+  prevHash: { type: String, required: true },
+  cost: { type: String, required: true }
 });
 
 // Virtual for this block instance URL.

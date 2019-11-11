@@ -14,7 +14,7 @@ exports.index = function(req, res) {
     },
     function(err, results) {
       res.render("index", {
-        title: "Local Library Home",
+        hash: "Local Library Home",
         error: err,
         data: results
       });
@@ -24,12 +24,12 @@ exports.index = function(req, res) {
 
 // Display list of all blocks.
 exports.block_list = function(req, res, next) {
-  Block.find({}, "title").exec(function(err, list_blocks) {
+  Block.find({}, "hash").exec(function(err, list_blocks) {
     if (err) {
       return next(err);
     }
     // Successful, so render
-    res.render("block_list", { title: "Block List", block_list: list_blocks });
+    res.render("block_list", { hash: "Block List", block_list: list_blocks });
   });
 };
 
@@ -52,7 +52,7 @@ exports.block_detail = function(req, res, next) {
         return next(err);
       }
       // Successful, so render.
-      res.render("block_detail", { title: "Title", block: results.block });
+      res.render("block_detail", { hash: "Hash", block: results.block });
     }
   );
 };
@@ -63,20 +63,20 @@ exports.block_create_get = function(req, res, next) {
     if (err) {
       return next(err);
     }
-    res.render("block_form", { title: "Create Block" });
+    res.render("block_form", { hash: "Create Block" });
   });
 };
 
 // Handle block create on POST.
 exports.block_create_post = [
   // Validate fields.
-  body("title", "Title must not be empty.")
+  body("hash", "Hash must not be empty.")
     .isLength({ min: 1 })
     .trim(),
-  body("summary", "Summary must not be empty.")
+  body("prevHash", "prevHash must not be empty.")
     .isLength({ min: 1 })
     .trim(),
-  body("isbn", "ISBN must not be empty")
+  body("cost", "Cost must not be empty")
     .isLength({ min: 1 })
     .trim(),
 
@@ -89,9 +89,9 @@ exports.block_create_post = [
 
     // Create a Block object with escaped and trimmed data.
     var block = new Block({
-      title: req.body.title,
-      summary: req.body.summary,
-      isbn: req.body.isbn
+      hash: req.body.hash,
+      prevHash: req.body.prevHash,
+      cost: req.body.cost
     });
 
     if (!errors.isEmpty()) {
@@ -103,7 +103,7 @@ exports.block_create_post = [
         }
 
         res.render("block_form", {
-          title: "Create Block",
+          hash: "Create Block",
           block: block,
           errors: errors.array()
         });
@@ -139,7 +139,7 @@ exports.block_delete_get = function(req, res, next) {
         res.redirect("/catalog/blocks");
       }
       // Successful, so render.
-      res.render("block_delete", { title: "Delete Block", block: results.block });
+      res.render("block_delete", { hash: "Delete Block", block: results.block });
     }
   );
 };
@@ -192,7 +192,7 @@ exports.block_update_get = function(req, res, next) {
         return next(err);
       }
       // Success.
-      res.render("block_form", { title: "Update Block", block: results.block });
+      res.render("block_form", { hash: "Update Block", block: results.block });
     }
   );
 };
@@ -200,20 +200,20 @@ exports.block_update_get = function(req, res, next) {
 // Handle block update on POST.
 exports.block_update_post = [
   // Validate fields.
-  body("title", "Title must not be empty.")
+  body("hash", "Hash must not be empty.")
     .isLength({ min: 1 })
     .trim(),
-  body("summary", "Summary must not be empty.")
+  body("prevHash", "prevHash must not be empty.")
     .isLength({ min: 1 })
     .trim(),
-  body("isbn", "ISBN must not be empty")
+  body("cost", "Cost must not be empty")
     .isLength({ min: 1 })
     .trim(),
 
   // Sanitize fields.
-  sanitizeBody("title").escape(),
-  sanitizeBody("summary").escape(),
-  sanitizeBody("isbn").escape(),
+  sanitizeBody("hash").escape(),
+  sanitizeBody("prevHash").escape(),
+  sanitizeBody("cost").escape(),
 
   // Process request after validation and sanitization.
   (req, res, next) => {
@@ -222,9 +222,9 @@ exports.block_update_post = [
 
     // Create a Block object with escaped/trimmed data and old id.
     var block = new Block({
-      title: req.body.title,
-      summary: req.body.summary,
-      isbn: req.body.isbn
+      hash: req.body.hash,
+      prevHash: req.body.prevHash,
+      cost: req.body.cost
     });
 
     if (!errors.isEmpty()) {
@@ -236,7 +236,7 @@ exports.block_update_post = [
         }
 
         res.render("block_form", {
-          title: "Update Block",
+          hash: "Update Block",
           block: block,
           errors: errors.array()
         });

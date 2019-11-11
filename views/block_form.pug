@@ -1,18 +1,18 @@
 extends layout
 
 block content
-  h1= title
+  h1= hash
 
   form(method='POST' action='')
     div.form-group
-      label(for='title') Title:
-      input#title.form-control(type='text' placeholder='Name of block' name='title' required='true' value=(undefined===block ? '' : block.title) )
+      label(for='hash') Hash:
+      input#hash.form-control(type='text' placeholder='Name of block' name='hash' required='true' value=(undefined===block ? '' : block.hash) )
     div.form-group
-      label(for='summary') Summary:
-      input#summary.form-control(type='textarea' placeholder='Summary' name='summary' value=(undefined===block ? '' : block.summary) required='true')
+      label(for='prevHash') prevHash:
+      input#prevHash.form-control(type='textarea' placeholder='prevHash' name='prevHash' value=(undefined===block ? '' : block.prevHash) required='true')
     div.form-group
-      label(for='isbn') ISBN:
-      input#isbn.form-control(type='text' placeholder='ISBN13' name='isbn' value=(undefined===block ? '' : block.isbn) required='true') 
+      label(for='cost') Cost:
+      input#cost.form-control(type='text' placeholder='Cost' name='cost' value=(undefined===block ? '' : block.cost) required='true') 
     button.btn.btn-primary(type='submit') Submit
 
   if errors 

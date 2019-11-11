@@ -1,10 +1,10 @@
 extends layout
 
 block content
-  h1 #{title}: #{block.title}
+  h1 #{hash}: #{block.hash}
 
-  p #[strong Summary:] #{block.summary}
-  p #[strong ISBN:] #{block.isbn}
+  p #[strong prevHash:] #{block.prevHash}
+  p #[strong Cost:] #{block.cost}
 
 
   div(style='margin-left:20px;margin-top:20px')
