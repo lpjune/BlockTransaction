@@ -3,3 +3,45 @@
     padding: 0;
     list-style: none;
 }
+
+.bg-card {
+    background-color: #5D1725 !important;
+  }
+  
+  .card-spacing {
+    padding-right:-15px;
+  }
+  
+  .dropdown-toggle::after {
+    display: none;
+  }
+  
+  p.no-space {
+    margin-bottom: 2%;
+  }
+  
+  ::placeholder { /* Chrome, Firefox, Opera, Safari 10.1+ */
+    color: rgba(255,255,255,.75);
+    opacity: 1; /* Firefox */
+  }
+  
+  .btn-search {
+    color: white;
+    background-color: #007bff!important;
+    border-color: rgba(0, 123, 255, 1);
+    padding-top:.5%; 
+    padding-bottom:.5%;
+  }
+  
+  .btn-search:hover {
+    border-color:rgba(255,255,255,.75);
+  }
+  
+  .footer-height {
+    height: 3rem;
+  }
+  
+  .input-height {
+    height: 198;
+  }
+  
