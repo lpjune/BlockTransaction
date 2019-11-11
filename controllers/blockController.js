@@ -82,6 +82,12 @@ exports.block_create_post = [
   body("firstName", "First name must not be empty")
     .isLength({ min: 1 })
     .trim(),
+  body("lastName", "Last name must not be empty")
+    .isLength({ min: 1 })
+    .trim(),
+  body("lastName", "Last name must not be empty")
+    .isLength({ min: 1 })
+    .trim(),
 
   // Sanitize fields.
   sanitizeBody("*").escape(),
@@ -95,7 +101,8 @@ exports.block_create_post = [
       hash: req.body.hash,
       prevHash: req.body.prevHash,
       cost: req.body.cost,
-      firstName: req.body.firstName
+      firstName: req.body.firstName,
+      lastName: req.body.lastName,
     });
 
     if (!errors.isEmpty()) {
@@ -216,12 +223,16 @@ exports.block_update_post = [
   body("firstName", "First name must not be empty")
     .isLength({ min: 1 })
     .trim(),
+  body("lastName", "Last name must not be empty")
+    .isLength({ min: 1 })
+    .trim(),
 
   // Sanitize fields.
   sanitizeBody("hash").escape(),
   sanitizeBody("prevHash").escape(),
   sanitizeBody("cost").escape(),
   sanitizeBody("firstName").escape(),
+  sanitizeBody("lastName").escape(),
 
   // Process request after validation and sanitization.
   (req, res, next) => {
@@ -234,7 +245,8 @@ exports.block_update_post = [
       hash: req.body.hash,
       prevHash: req.body.prevHash,
       cost: req.body.cost,
-      firstName: req.body.firstName
+      firstName: req.body.firstName,
+      lastName: req.body.lastName
     });
 
     if (!errors.isEmpty()) {
