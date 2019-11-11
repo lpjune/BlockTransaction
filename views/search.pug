@@ -1,0 +1,19 @@
+extends layout
+
+
+
+block content
+  h1(style="text-align:center") Search Results:
+  div.row.justify-content-center
+    each block in block_list
+      div.col-auto(style="margin-bottom: 40px;")
+        div.card.h-100(style="width: 15rem")
+          h5.card-header
+            | Card Title 
+            a.btn.btn-light.fas.fa-cog.float-right(href=block.url)
+          div.card-body
+            p.no-space Name: #{block.name}
+            p.no-space Hash: #{block.hash}
+            p.no-space Prev Hash: #{block.prevHash}
+            p.no-space Cost: #{block.cost}
+          div.card-footer.text-muted #{block.date}

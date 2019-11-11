@@ -96,7 +96,7 @@ exports.block_list_search = function(req, res, next) {
       res.render("block_list", { hash: "Block List", block_list: list_blocks });
     }
     // Successful, so render
-    res.render("block_list", { hash: "Block List", block_list: list_blocks });
+    res.render("search", { hash: "Block List", block_list: list_blocks });
   });
 };
 
