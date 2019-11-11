@@ -30,7 +30,7 @@ html(lang='en')
         // sort
         ul.navbar-nav.ml-auto
           li.nav-item
-              a.nav-link(href="/new")
+              a.nav-link(href="/catalog/block/create")
                 i.fas.fa-plus.fa-fw 
                 | Add New
           li.nav-item.dropdown
@@ -38,9 +38,9 @@ html(lang='en')
               i.fas.fa-sort.fa-fw
               | Sort
             .dropdown-menu.dropdown-menu-right(aria-labelledby='navbarDropdownMenuLink')
-              a.dropdown-item(href='/sorted_date') Date
-              a.dropdown-item(href='/sorted_customer') Customer
-              a.dropdown-item(href='/sorted_cost') Cost
+              a.dropdown-item(href='/catalog/blocks/date') Date
+              a.dropdown-item(href='/catalog/blocks/name') Name
+              a.dropdown-item(href='/catalog/blocks/cost') Cost
           // search
 
           li.nav-item(style="padding-right:.5rem;")

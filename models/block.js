@@ -16,5 +16,9 @@ BlockSchema.virtual("url").get(function() {
   return "/catalog/block/" + this._id;
 });
 
+BlockSchema.virtual("name").get(function() {
+  return this.lastName + ", " + this.firstName;
+});
+
 // Export model.
 module.exports = mongoose.model("Block", BlockSchema);
