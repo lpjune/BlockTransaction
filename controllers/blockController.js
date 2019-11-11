@@ -79,6 +79,9 @@ exports.block_create_post = [
   body("cost", "Cost must not be empty")
     .isLength({ min: 1 })
     .trim(),
+  body("firstName", "First name must not be empty")
+    .isLength({ min: 1 })
+    .trim(),
 
   // Sanitize fields.
   sanitizeBody("*").escape(),
@@ -91,7 +94,8 @@ exports.block_create_post = [
     var block = new Block({
       hash: req.body.hash,
       prevHash: req.body.prevHash,
-      cost: req.body.cost
+      cost: req.body.cost,
+      firstName: req.body.firstName
     });
 
     if (!errors.isEmpty()) {
@@ -209,11 +213,15 @@ exports.block_update_post = [
   body("cost", "Cost must not be empty")
     .isLength({ min: 1 })
     .trim(),
+  body("firstName", "First name must not be empty")
+    .isLength({ min: 1 })
+    .trim(),
 
   // Sanitize fields.
   sanitizeBody("hash").escape(),
   sanitizeBody("prevHash").escape(),
   sanitizeBody("cost").escape(),
+  sanitizeBody("firstName").escape(),
 
   // Process request after validation and sanitization.
   (req, res, next) => {
@@ -222,9 +230,11 @@ exports.block_update_post = [
 
     // Create a Block object with escaped/trimmed data and old id.
     var block = new Block({
+      _id:req.params.id, 
       hash: req.body.hash,
       prevHash: req.body.prevHash,
-      cost: req.body.cost
+      cost: req.body.cost,
+      firstName: req.body.firstName
     });
 
     if (!errors.isEmpty()) {
