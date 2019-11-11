@@ -7,7 +7,8 @@ var BlockSchema = new Schema({
   prevHash: { type: String, required: true },
   cost: { type: String, required: true },
   firstName: { type: String, required: true },
-  lastName: { type: String, required: true }
+  lastName: { type: String, required: true },
+  date: { type: String, required: true }
 });
 
 // Virtual for this block instance URL.

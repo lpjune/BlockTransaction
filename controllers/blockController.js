@@ -85,7 +85,7 @@ exports.block_create_post = [
   body("lastName", "Last name must not be empty")
     .isLength({ min: 1 })
     .trim(),
-  body("lastName", "Last name must not be empty")
+  body("date", "Date must not be empty")
     .isLength({ min: 1 })
     .trim(),
 
@@ -103,6 +103,7 @@ exports.block_create_post = [
       cost: req.body.cost,
       firstName: req.body.firstName,
       lastName: req.body.lastName,
+      date: req.body.date,
     });
 
     if (!errors.isEmpty()) {
@@ -226,6 +227,9 @@ exports.block_update_post = [
   body("lastName", "Last name must not be empty")
     .isLength({ min: 1 })
     .trim(),
+  body("date", "Date must not be empty")
+    .isLength({ min: 1 })
+    .trim(),
 
   // Sanitize fields.
   sanitizeBody("hash").escape(),
@@ -233,6 +237,7 @@ exports.block_update_post = [
   sanitizeBody("cost").escape(),
   sanitizeBody("firstName").escape(),
   sanitizeBody("lastName").escape(),
+  sanitizeBody("date").escape(),
 
   // Process request after validation and sanitization.
   (req, res, next) => {
@@ -246,7 +251,8 @@ exports.block_update_post = [
       prevHash: req.body.prevHash,
       cost: req.body.cost,
       firstName: req.body.firstName,
-      lastName: req.body.lastName
+      lastName: req.body.lastName,
+      date: req.body.date
     });
 
     if (!errors.isEmpty()) {
