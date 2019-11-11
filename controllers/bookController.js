@@ -1,5 +1,4 @@
 var Book = require('../models/book');
-var Author = require('../models/author');
 var Genre = require('../models/genre');
 var BookInstance = require('../models/bookinstance');
 
@@ -20,9 +19,6 @@ exports.index = function(req, res) {
         book_instance_available_count: function(callback) {
             BookInstance.count({status:'Available'},callback);
         },
-        author_count: function(callback) {
-            Author.count(callback);
-        },
         genre_count: function(callback) {
             Genre.count(callback);
         },
@@ -35,8 +31,7 @@ exports.index = function(req, res) {
 // Display list of all books.
 exports.book_list = function(req, res, next) {
 
-  Book.find({}, 'title author ')
-    .populate('author')
+  Book.find({}, 'title')
     .exec(function (err, list_books) {
       if (err) { return next(err); }
       // Successful, so render
@@ -52,7 +47,6 @@ exports.book_detail = function(req, res, next) {
         book: function(callback) {
 
             Book.findById(req.params.id)
-              .populate('author')
               .populate('genre')
               .exec(callback);
         },
@@ -79,15 +73,12 @@ exports.book_create_get = function(req, res, next) {
 
     // Get all authors and genres, which we can use for adding to our book.
     async.parallel({
-        authors: function(callback) {
-            Author.find(callback);
-        },
         genres: function(callback) {
             Genre.find(callback);
         },
     }, function(err, results) {
         if (err) { return next(err); }
-        res.render('book_form', { title: 'Create Book',authors:results.authors, genres:results.genres });
+        res.render('book_form', { title: 'Create Book', genres:results.genres });
     });
 
 };
@@ -107,7 +98,6 @@ exports.book_create_post = [
 
     // Validate fields.
     body('title', 'Title must not be empty.').isLength({ min: 1 }).trim(),
-    body('author', 'Author must not be empty.').isLength({ min: 1 }).trim(),
     body('summary', 'Summary must not be empty.').isLength({ min: 1 }).trim(),
     body('isbn', 'ISBN must not be empty').isLength({ min: 1 }).trim(),
   
@@ -124,7 +114,6 @@ exports.book_create_post = [
         // Create a Book object with escaped and trimmed data.
         var book = new Book(
           { title: req.body.title,
-            author: req.body.author,
             summary: req.body.summary,
             isbn: req.body.isbn,
             genre: req.body.genre
@@ -135,9 +124,6 @@ exports.book_create_post = [
 
             // Get all authors and genres for form.
             async.parallel({
-                authors: function(callback) {
-                    Author.find(callback);
-                },
                 genres: function(callback) {
                     Genre.find(callback);
                 },
@@ -150,7 +136,7 @@ exports.book_create_post = [
                         results.genres[i].checked='true';
                     }
                 }
-                res.render('book_form', { title: 'Create Book',authors:results.authors, genres:results.genres, book: book, errors: errors.array() });
+                res.render('book_form', { title: 'Create Book', genres:results.genres, book: book, errors: errors.array() });
             });
             return;
         }
@@ -172,7 +158,7 @@ exports.book_delete_get = function(req, res, next) {
 
     async.parallel({
         book: function(callback) {
-            Book.findById(req.params.id).populate('author').populate('genre').exec(callback);
+            Book.findById(req.params.id).populate('genre').exec(callback);
         },
         book_bookinstances: function(callback) {
             BookInstance.find({ 'book': req.params.id }).exec(callback);
@@ -195,7 +181,7 @@ exports.book_delete_post = function(req, res, next) {
 
     async.parallel({
         book: function(callback) {
-            Book.findById(req.body.id).populate('author').populate('genre').exec(callback);
+            Book.findById(req.body.id).populate('genre').exec(callback);
         },
         book_bookinstances: function(callback) {
             BookInstance.find({ 'book': req.body.id }).exec(callback);
@@ -227,10 +213,7 @@ exports.book_update_get = function(req, res, next) {
     // Get book, authors and genres for form.
     async.parallel({
         book: function(callback) {
-            Book.findById(req.params.id).populate('author').populate('genre').exec(callback);
-        },
-        authors: function(callback) {
-            Author.find(callback);
+            Book.findById(req.params.id).populate('genre').exec(callback);
         },
         genres: function(callback) {
             Genre.find(callback);
@@ -251,7 +234,7 @@ exports.book_update_get = function(req, res, next) {
                     }
                 }
             }
-            res.render('book_form', { title: 'Update Book', authors:results.authors, genres:results.genres, book: results.book });
+            res.render('book_form', { title: 'Update Book', genres:results.genres, book: results.book });
         });
 
 };
@@ -273,13 +256,11 @@ exports.book_update_post = [
    
     // Validate fields.
     body('title', 'Title must not be empty.').isLength({ min: 1 }).trim(),
-    body('author', 'Author must not be empty.').isLength({ min: 1 }).trim(),
     body('summary', 'Summary must not be empty.').isLength({ min: 1 }).trim(),
     body('isbn', 'ISBN must not be empty').isLength({ min: 1 }).trim(),
 
     // Sanitize fields.
     sanitizeBody('title').escape(),
-    sanitizeBody('author').escape(),
     sanitizeBody('summary').escape(),
     sanitizeBody('isbn').escape(),
     sanitizeBody('genre.*').escape(),
@@ -293,7 +274,6 @@ exports.book_update_post = [
         // Create a Book object with escaped/trimmed data and old id.
         var book = new Book(
           { title: req.body.title,
-            author: req.body.author,
             summary: req.body.summary,
             isbn: req.body.isbn,
             genre: (typeof req.body.genre==='undefined') ? [] : req.body.genre,
@@ -305,9 +285,6 @@ exports.book_update_post = [
 
             // Get all authors and genres for form
             async.parallel({
-                authors: function(callback) {
-                    Author.find(callback);
-                },
                 genres: function(callback) {
                     Genre.find(callback);
                 },
@@ -320,7 +297,7 @@ exports.book_update_post = [
                         results.genres[i].checked='true';
                     }
                 }
-                res.render('book_form', { title: 'Update Book',authors:results.authors, genres:results.genres, book: book, errors: errors.array() });
+                res.render('book_form', { title: 'Update Book', genres:results.genres, book: book, errors: errors.array() });
             });
             return;
         }
