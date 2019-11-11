@@ -1,0 +1,19 @@
+extends layout
+
+block content
+
+  h1 #{title}: #{block.title}
+
+  p #[strong Summary:] #{block.summary}
+  p #[strong ISBN:] #{block.isbn}
+
+  hr
+
+
+  p Do you really want to delete this Block?
+
+  form(method='POST' action='')
+    div.form-group
+      input#id.form-control(type='hidden' name='id' required='true', value=block._id )
+
+    button.btn.btn-primary(type='submit') Delete
