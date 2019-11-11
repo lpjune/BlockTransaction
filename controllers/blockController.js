@@ -24,8 +24,7 @@ exports.index = function(req, res) {
 
 // Display list of all blocks sorted by hash.
 exports.block_list = function(req, res, next) {
-  Block.find({})
-  .exec(function(err, list_blocks) {
+  Block.find({}).exec(function(err, list_blocks) {
     if (err) {
       return next(err);
     }
@@ -42,20 +41,19 @@ exports.block_list = function(req, res, next) {
 // Display list of all blocks sorted by date.
 exports.block_list_date = function(req, res, next) {
   Block.find({})
-  .sort({ date: "desc" })
-  .exec(function(err, list_blocks) {
-    if (err) {
-      return next(err);
-    }
-    // Successful, so render
-    res.render("block_list", { hash: "Block List", block_list: list_blocks });
-  });
+    .sort({ date: "desc" })
+    .exec(function(err, list_blocks) {
+      if (err) {
+        return next(err);
+      }
+      // Successful, so render
+      res.render("block_list", { hash: "Block List", block_list: list_blocks });
+    });
 };
 
 // Display list of all blocks sorted by last name.
 exports.block_list_name = function(req, res, next) {
-  Block.find({})
-  .exec(function(err, list_blocks) {
+  Block.find({}).exec(function(err, list_blocks) {
     if (err) {
       return next(err);
     }
@@ -72,14 +70,33 @@ exports.block_list_name = function(req, res, next) {
 // Display list of all blocks sorted by cost.
 exports.block_list_cost = function(req, res, next) {
   Block.find({})
-  .sort({cost: "asc"})
-  .collation({ locale: "en_US", numericOrdering: true })
-  .exec(function(err, list_blocks) {
+    .sort({ cost: "asc" })
+    .collation({ locale: "en_US", numericOrdering: true })
+    .exec(function(err, list_blocks) {
+      if (err) {
+        return next(err);
+      }
+      // Successful, so render
+      res.render("block_list", { hash: "Block List", block_list: list_blocks });
+    });
+};
+
+// Display list of all blocks matching search.
+exports.block_list_search = function(req, res, next) {
+  let query = req.body.search_term;
+  console.log(query);
+  if (typeof query === "undefined") {
+    res()
+      .status(400)
+      .json({ error: "missing parameter search_term", data: null }); // Only an  example
+    return;
+  }
+  Block.find({ $text: { $search: query } }).exec(function(err, list_blocks) {
     if (err) {
-      return next(err);
+      res.render("block_list", { hash: "Block List", block_list: list_blocks });
     }
     // Successful, so render
-    res.render("block_list", { hash: "Block List", block_list: list_blocks });
+    res.render("search", { hash: "Block List", block_list: list_blocks });
   });
 };
 

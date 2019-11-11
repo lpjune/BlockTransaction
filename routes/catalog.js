@@ -42,4 +42,7 @@ router.get("/blocks/name", block_controller.block_list_name);
 // GET request for list of all Block sorted by cost
 router.get("/blocks/cost", block_controller.block_list_cost);
 
+// POST request to search Blocks
+router.post("/blocks/search", block_controller.block_list_search);
+
 module.exports = router;
