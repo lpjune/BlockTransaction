@@ -24,6 +24,23 @@ var db = mongoose.connection;
 db.on('error', console.error.bind(console, 'MongoDB connection error:'));
 
 
+
+  let BlockChain = require("./blockchain/blockChain");
+
+  let blockChain = new BlockChain();
+
+  let hash = require('object-hash');
+
+  let PROOF = 15;
+
+  if(blockChain.isEmpty()) {
+    blockChain.addNewBlock(null, "Alex", "Blah", "909", "12-24-2019");
+  };
+
+  console.log("Chain : ", blockChain.chain);
+
+
+
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'pug');

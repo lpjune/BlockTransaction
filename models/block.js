@@ -3,8 +3,9 @@ var mongoose = require("mongoose");
 var Schema = mongoose.Schema;
 
 var BlockSchema = new Schema({
+  index: { type: Schema.Types.Number, required: true },
   hash: { type: String, required: true },
-  prevHash: { type: String, required: true },
+  prevHash: { type: String, required: false },
   cost: { type: String, required: true },
   firstName: { type: String, required: true },
   lastName: { type: String, required: true },
