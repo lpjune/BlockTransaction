@@ -166,8 +166,8 @@ exports.block_create_post = [
       block_chain.lastBlock().hash,
       req.body.firstName,
       req.body.lastName,
-      req.body.date,
-      req.body.cost
+      req.body.cost,
+      req.body.date
     );
 
     if (!errors.isEmpty()) {
