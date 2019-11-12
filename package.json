@@ -11,6 +11,7 @@
   },
   "dependencies": {
     "async": "^2.6.2",
+    "chalk": "^3.0.0",
     "compression": "^1.7.3",
     "cookie-parser": "~1.4.3",
     "debug": "~2.6.9",
@@ -20,8 +21,9 @@
     "helmet": "^3.15.1",
     "http-errors": "~1.6.2",
     "moment": "^2.24.0",
-    "mongoose": "^5.7.5",
+    "mongoose": "^5.7.10",
     "morgan": "~1.9.1",
+    "object-hash": "^2.0.0",
     "pug": "2.0.0-beta11"
   },
   "devDependencies": {
