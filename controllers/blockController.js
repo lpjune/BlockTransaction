@@ -1,9 +1,12 @@
 var Block = require("../models/block");
+var app = require("../app.js")
 
 const { body, validationResult } = require("express-validator/check");
 const { sanitizeBody } = require("express-validator/filter");
 
 var async = require("async");
+const BlockChain = require("../blockchain/blockChain")
+
 
 exports.index = function(req, res) {
   async.parallel(
@@ -137,12 +140,6 @@ exports.block_create_get = function(req, res, next) {
 // Handle block create on POST.
 exports.block_create_post = [
   // Validate fields.
-  body("hash", "Hash must not be empty.")
-    .isLength({ min: 1 })
-    .trim(),
-  body("prevHash", "prevHash must not be empty.")
-    .isLength({ min: 1 })
-    .trim(),
   body("cost", "Cost must not be empty")
     .isLength({ min: 1 })
     .trim(),
@@ -164,14 +161,14 @@ exports.block_create_post = [
     const errors = validationResult(req);
 
     // Create a Block object with escaped and trimmed data.
-    var block = new Block({
-      hash: req.body.hash,
-      prevHash: req.body.prevHash,
-      cost: req.body.cost,
-      firstName: req.body.firstName,
-      lastName: req.body.lastName,
-      date: req.body.date
-    });
+    
+    block_chain.addNewBlock(
+      block_chain.lastBlock().hash,
+      req.body.firstName,
+      req.body.lastName,
+      req.body.date,
+      req.body.cost
+    );
 
     if (!errors.isEmpty()) {
       // There are errors. Render form again with sanitized values/error messages.
@@ -189,14 +186,9 @@ exports.block_create_post = [
       });
       return;
     } else {
-      // Data from form is valid. Save block.
-      block.save(function(err) {
-        if (err) {
-          return next(err);
-        }
         // Successful - redirect to new block record.
-        res.redirect(block.url);
-      });
+        res.redirect("/catalog");
+      
     }
   }
 ];

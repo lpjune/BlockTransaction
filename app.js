@@ -25,7 +25,8 @@ db.on("error", console.error.bind(console, "MongoDB connection error:"));
 
 let BlockChain = require("./blockchain/blockChain");
 
-let blockChain = new BlockChain();
+global.block_chain = new BlockChain();
+
 
 let hash = require("object-hash");
 
@@ -35,13 +36,16 @@ let PROOF = 15;
 Block.find({})
   .then(blocks => {
 
-    for(block in blocks) {
-      blockChain.chain.push(blocks)
+    for(i=0; i <= blocks.length - 1; i++) {
+      block_chain.chain.push(blocks[i])
     }
-    console.log(blockChain.chain);
-    console.log(blockChain.chain.length);
-    if (blockChain.isEmpty()) {
-      blockChain.addNewBlock(null, "Alex", "Blah", "909", "12-24-2019");
+    
+    
+    console.log(block_chain.chain);
+    console.log(block_chain.chain.length);
+    console.log(block_chain.lastBlock())
+    if (block_chain.isEmpty()) {
+      block_chain.addNewBlock(null, "Alex", "Blah", "909", "12-24-2019");
     }
   })
   .catch(() => {
@@ -84,5 +88,5 @@ app.use(function(err, req, res, next) {
   res.status(err.status || 500);
   res.render("error");
 });
-
+module.exports = block_chain;
 module.exports = app;

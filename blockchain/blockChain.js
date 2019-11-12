@@ -47,7 +47,7 @@ class BlockChain {
         }
     }
 
-    lastBock() {
+    lastBlock() {
         return this
             .chain
             .slice(-1)[0];

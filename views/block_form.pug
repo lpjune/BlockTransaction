@@ -5,12 +5,6 @@ block content
 
   form(method='POST' action='')
     div.form-group
-      label(for='hash') Hash:
-      input#hash.form-control(type='text' placeholder='Hash' name='hash' required='true' value=(undefined===block ? '' : block.hash) )
-    div.form-group
-      label(for='prevHash') prevHash:
-      input#prevHash.form-control(type='textarea' placeholder='Previous Hash' name='prevHash' value=(undefined===block ? '' : block.prevHash) required='true')
-    div.form-group
       label(for='cost') Cost:
       input#cost.form-control(type='text' placeholder='Cost' name='cost' value=(undefined===block ? '' : block.cost) required='true') 
     div.form-group
