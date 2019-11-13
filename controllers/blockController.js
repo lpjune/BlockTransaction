@@ -186,11 +186,11 @@ exports.block_create_post = [
 
       return;
     } else {
-      Block.find({})
-  .then(blocks => {
-    for (i = 0; i <= blocks.length - 1; i++) {
-      block_chain.chain.push(blocks[i]);
-    }})
+      Block.find({}).then(blocks => {
+        for (i = 0; i <= blocks.length - 1; i++) {
+          block_chain.chain.push(blocks[i]);
+        }
+      });
       if (block_chain.isEmpty()) {
         block_chain.addNewBlock(
           null,
@@ -210,8 +210,7 @@ exports.block_create_post = [
       }
 
       // Successful - save new block, redirect to new block record.
-      res.redirect("/catalog/block/create")
-      
+      res.redirect("/catalog/block/create");
     }
   }
 ];
