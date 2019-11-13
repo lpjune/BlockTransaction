@@ -26,15 +26,12 @@ exports.index = function(req, res) {
 
 // Display list of all blocks sorted by hash.
 exports.block_list = function(req, res, next) {
-  Block.find({}).exec(function(err, list_blocks) {
+  Block.find({})
+  .sort({index: "asc"})
+  .exec(function(err, list_blocks) {
     if (err) {
       return next(err);
     }
-    list_blocks.sort(function(a, b) {
-      let textA = a.hash.toUpperCase();
-      let textB = b.hash.toUpperCase();
-      return textA < textB ? -1 : textA > textB ? 1 : 0;
-    });
     // Successful, so render
     res.render("block_list", { hash: "Block List", block_list: list_blocks });
   });
@@ -270,11 +267,6 @@ exports.block_delete_post = function(req, res, next) {
       }
       // Success
       else {
-        // TODO
-        // get delete block index #
-        // find all blocks order by index
-        // start at end of list, index last prevHash = hash of last index-1 until at index of delete block
-        // delete block
 
         Block.findByIdAndRemove(req.body.id, function deleteBlock(err) {
           if (err) {
