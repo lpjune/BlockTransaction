@@ -27,7 +27,6 @@ let BlockChain = require("./blockchain/blockChain");
 
 global.block_chain = new BlockChain();
 
-
 let hash = require("object-hash");
 
 let PROOF = 15;
@@ -35,15 +34,13 @@ let PROOF = 15;
 // set chain from fb, add first block if chain empty
 Block.find({})
   .then(blocks => {
-
-    for(i=0; i <= blocks.length - 1; i++) {
-      block_chain.chain.push(blocks[i])
+    for (i = 0; i <= blocks.length - 1; i++) {
+      block_chain.chain.push(blocks[i]);
     }
-    
-    
+
     console.log(block_chain.chain);
     console.log(block_chain.chain.length);
-    console.log(block_chain.lastBlock())
+    console.log(block_chain.lastBlock());
     if (block_chain.isEmpty()) {
       block_chain.addNewBlock(null, "Alex", "Blah", "909", "12-24-2019");
     }
@@ -51,10 +48,6 @@ Block.find({})
   .catch(() => {
     console.log("Sorry! Something went wrong.");
   });
-
-
-
-
 
 // view engine setup
 app.set("views", path.join(__dirname, "views"));

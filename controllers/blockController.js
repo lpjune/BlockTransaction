@@ -171,12 +171,11 @@ exports.block_create_post = [
           return next(err);
         }
 
-        var block =
-          new Block()
-          block.firstName = req.body.firstName
-          block.lastName = req.body.lastName
-          block.cost = req.body.cost
-          block.date = req.body.date
+        var block = new Block();
+        block.firstName = req.body.firstName;
+        block.lastName = req.body.lastName;
+        block.cost = req.body.cost;
+        block.date = req.body.date;
 
         res.render("block_form", {
           hash: "Create Block",
