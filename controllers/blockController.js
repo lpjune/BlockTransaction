@@ -83,6 +83,20 @@ exports.block_list_cost = function(req, res, next) {
     });
 };
 
+// Display list of all blocks sorted by index.
+exports.block_list_index = function(req, res, next) {
+  Block.find({})
+    .sort({ index: "asc" })
+    .collation({ locale: "en_US", numericOrdering: true })
+    .exec(function(err, list_blocks) {
+      if (err) {
+        return next(err);
+      }
+      // Successful, so render
+      res.render("block_list", { hash: "Block List", block_list: list_blocks });
+    });
+};
+
 // Display list of all blocks matching search.
 exports.block_list_search = function(req, res, next) {
   let query = req.body.search_term;

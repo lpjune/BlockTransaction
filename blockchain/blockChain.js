@@ -45,6 +45,12 @@ class BlockChain {
     }
   }
 
+  // TODO
+  // set indices on change
+
+  // TODO
+  // set prevhashes on change
+
   lastBlock() {
     return this.chain.slice(-1)[0];
   }
