@@ -31,7 +31,7 @@ let hash = require("object-hash");
 
 let PROOF = 15;
 
-// set chain from fb, add first block if chain empty
+// set chain from db, add first block if chain empty
 Block.find({})
   .then(blocks => {
     for (i = 0; i <= blocks.length - 1; i++) {
@@ -41,14 +41,7 @@ Block.find({})
     console.log(block_chain.chain);
     console.log(block_chain.chain.length);
     console.log(block_chain.lastBlock());
-    if (block_chain.isEmpty()) {
-      block_chain.addNewBlock(null, "Alex", "Blah", "909", "12-24-2019");
-    }
-  })
-  .catch(() => {
-    console.log("Sorry! Something went wrong.");
   });
-
 // view engine setup
 app.set("views", path.join(__dirname, "views"));
 app.set("view engine", "pug");

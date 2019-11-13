@@ -183,17 +183,35 @@ exports.block_create_post = [
           errors: errors.array()
         });
       });
+
       return;
     } else {
+      Block.find({})
+  .then(blocks => {
+    for (i = 0; i <= blocks.length - 1; i++) {
+      block_chain.chain.push(blocks[i]);
+    }})
+      if (block_chain.isEmpty()) {
+        block_chain.addNewBlock(
+          null,
+          req.body.firstName,
+          req.body.lastName,
+          req.body.cost,
+          req.body.date
+        );
+      } else {
+        block_chain.addNewBlock(
+          block_chain.lastBlock().hash,
+          req.body.firstName,
+          req.body.lastName,
+          req.body.cost,
+          req.body.date
+        );
+      }
+
       // Successful - save new block, redirect to new block record.
-      block_chain.addNewBlock(
-        block_chain.lastBlock().hash,
-        req.body.firstName,
-        req.body.lastName,
-        req.body.cost,
-        req.body.date
-      );
-      res.redirect("/catalog");
+      res.redirect("/catalog/block/create")
+      
     }
   }
 ];
@@ -239,6 +257,12 @@ exports.block_delete_post = function(req, res, next) {
       }
       // Success
       else {
+        // TODO
+        // get delete block index #
+        // find all blocks order by index
+        // start at end of list, index last prevHash = hash of last index-1 until at index of delete block
+        // delete block
+
         Block.findByIdAndRemove(req.body.id, function deleteBlock(err) {
           if (err) {
             return next(err);
