@@ -27,14 +27,14 @@ exports.index = function(req, res) {
 // Display list of all blocks sorted by hash.
 exports.block_list = function(req, res, next) {
   Block.find({})
-  .sort({index: "asc"})
-  .exec(function(err, list_blocks) {
-    if (err) {
-      return next(err);
-    }
-    // Successful, so render
-    res.render("block_list", { hash: "Block List", block_list: list_blocks });
-  });
+    .sort({ index: "asc" })
+    .exec(function(err, list_blocks) {
+      if (err) {
+        return next(err);
+      }
+      // Successful, so render
+      res.render("block_list", { hash: "Block List", block_list: list_blocks });
+    });
 };
 
 // Display list of all blocks sorted by date.
