@@ -9,6 +9,11 @@ var block_controller = require("../controllers/blockController");
 // GET catalog home page.
 router.get("/", block_controller.block_list_index);
 
+router.post('/', function(req, res) {
+    res.redirect(307, '/catalog');
+  });
+
+
 // GET request for creating a Block. NOTE This must come before routes that display Block (uses id).
 router.get("/block/create", block_controller.block_create_get);
 

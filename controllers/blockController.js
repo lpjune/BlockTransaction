@@ -253,31 +253,16 @@ exports.block_delete_get = function(req, res, next) {
 
 // Handle block delete on POST.
 exports.block_delete_post = function(req, res, next) {
-  // Assume the post has valid id (ie no validation/sanitization).
-
-  async.parallel(
-    {
-      block: function(callback) {
-        Block.findById(req.body.id).exec(callback);
-      }
-    },
-    function(err, results) {
-      if (err) {
-        return next(err);
-      }
-      // Success
-      else {
-
-        Block.findByIdAndRemove(req.body.id, function deleteBlock(err) {
-          if (err) {
-            return next(err);
-          }
-          // Success - got to blocks list.
-          res.redirect("/catalog/blocks");
-        });
-      }
+  // gets correct ID
+  Block.findOne({ _id: req.body.id })
+  .exec(function(err, block) {
+    if (err) {
+      return next(err);
     }
-  );
+    block.hidden = true;
+    block.save(err => console.log(err));
+  })
+  res.redirect("/");
 };
 
 // Display block update form on GET.

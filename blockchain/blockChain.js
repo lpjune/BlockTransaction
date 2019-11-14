@@ -26,7 +26,7 @@ class BlockChain {
       lastName: lastName,
       cost: cost,
       date: date,
-      hidden: false
+      hidden: false,
     };
 
     if (validator.proofOfWork() == TARGET_HASH) {
@@ -47,6 +47,7 @@ class BlockChain {
   }
 
   lastBlock() {
+    console.log("Last: " + this.chain.slice(-1)[0])
     return this.chain.slice(-1)[0];
   }
 
