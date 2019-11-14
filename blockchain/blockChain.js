@@ -26,7 +26,7 @@ class BlockChain {
       lastName: lastName,
       cost: cost,
       date: date,
-      hidden: false
+      hidden: false,
     };
 
     if (validator.proofOfWork() == TARGET_HASH) {
