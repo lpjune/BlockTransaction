@@ -6,7 +6,7 @@ html(lang='en')
     meta(name='viewport' content='width=device-width, initial-scale=1')
     link(rel='stylesheet' href='/vendor/bootstrap.min.css')
     link(rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.0/css/all.css" integrity="sha384-lZN37f5QGtY3VHgisS14W3ExzMWZxybE1SJSEsQp9S+oqd12jhcu+A56Ebc1zFSJ" crossorigin="anonymous")
-    
+
     script(src='https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js')
     script(src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous")
     script(src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous")
@@ -30,9 +30,9 @@ html(lang='en')
         // sort
         ul.navbar-nav.ml-auto
           li.nav-item
-              a.nav-link(href="/catalog/block/create")
-                i.fas.fa-plus.fa-fw 
-                | Add New
+            a.nav-link(href="/catalog/block/create")
+              i.fas.fa-plus.fa-fw 
+              | Add New
           li.nav-item.dropdown
             a#navbarDropdownMenuLink.nav-link.dropdown-toggle(href='#' role='button' data-toggle='dropdown' aria-haspopup='true' aria-expanded='false')
               i.fas.fa-sort.fa-fw
@@ -46,7 +46,7 @@ html(lang='en')
           li.nav-item(style="padding-right:.5rem;")
             form.form-inline.ml-auto(method="POST" action="/catalog/blocks/search" style="height:100%;")
               div.md-form.my-0
-                input.form-control(id="search_term" name="search_term" style="padding-top:0; padding-bottom:0;" type='text', placeholder='Search', aria-label='Search')
+                input.form-control(id="search_term" name="search_term" style="padding-top:0; padding-bottom:0;" type='text' placeholder='Search' aria-label='Search')
                 button.btn-info.btn-search.btn-sm.my-0.ml-sm-2(type='submit') 
                   i.fas.fa-search.fa-fw
 

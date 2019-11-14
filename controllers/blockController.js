@@ -1,9 +1,11 @@
 var Block = require("../models/block");
+var app = require("../app.js");
 
 const { body, validationResult } = require("express-validator/check");
 const { sanitizeBody } = require("express-validator/filter");
 
 var async = require("async");
+const BlockChain = require("../blockchain/blockChain");
 
 exports.index = function(req, res) {
   async.parallel(
@@ -24,18 +26,15 @@ exports.index = function(req, res) {
 
 // Display list of all blocks sorted by hash.
 exports.block_list = function(req, res, next) {
-  Block.find({}).exec(function(err, list_blocks) {
-    if (err) {
-      return next(err);
-    }
-    list_blocks.sort(function(a, b) {
-      let textA = a.hash.toUpperCase();
-      let textB = b.hash.toUpperCase();
-      return textA < textB ? -1 : textA > textB ? 1 : 0;
+  Block.find({})
+    .sort({ index: "asc" })
+    .exec(function(err, list_blocks) {
+      if (err) {
+        return next(err);
+      }
+      // Successful, so render
+      res.render("block_list", { hash: "Block List", block_list: list_blocks });
     });
-    // Successful, so render
-    res.render("block_list", { hash: "Block List", block_list: list_blocks });
-  });
 };
 
 // Display list of all blocks sorted by date.
@@ -71,6 +70,20 @@ exports.block_list_name = function(req, res, next) {
 exports.block_list_cost = function(req, res, next) {
   Block.find({})
     .sort({ cost: "asc" })
+    .collation({ locale: "en_US", numericOrdering: true })
+    .exec(function(err, list_blocks) {
+      if (err) {
+        return next(err);
+      }
+      // Successful, so render
+      res.render("block_list", { hash: "Block List", block_list: list_blocks });
+    });
+};
+
+// Display list of all blocks sorted by index.
+exports.block_list_index = function(req, res, next) {
+  Block.find({})
+    .sort({ index: "asc" })
     .collation({ locale: "en_US", numericOrdering: true })
     .exec(function(err, list_blocks) {
       if (err) {
@@ -137,23 +150,21 @@ exports.block_create_get = function(req, res, next) {
 // Handle block create on POST.
 exports.block_create_post = [
   // Validate fields.
-  body("hash", "Hash must not be empty.")
+  body("cost", "Cost must be a number")
     .isLength({ min: 1 })
+    .isFloat()
     .trim(),
-  body("prevHash", "prevHash must not be empty.")
+  body("firstName", "First name must be letters only")
     .isLength({ min: 1 })
+    .isAlpha()
     .trim(),
-  body("cost", "Cost must not be empty")
+  body("lastName", "Last name must be letters only")
     .isLength({ min: 1 })
+    .isAlpha()
     .trim(),
-  body("firstName", "First name must not be empty")
+  body("date", "Date must be MM-DD-YYYY")
     .isLength({ min: 1 })
-    .trim(),
-  body("lastName", "Last name must not be empty")
-    .isLength({ min: 1 })
-    .trim(),
-  body("date", "Date must not be empty")
-    .isLength({ min: 1 })
+    .matches(/^(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1])-([0-9]{4})$/)
     .trim(),
 
   // Sanitize fields.
@@ -163,16 +174,6 @@ exports.block_create_post = [
     // Extract the validation errors from a request.
     const errors = validationResult(req);
 
-    // Create a Block object with escaped and trimmed data.
-    var block = new Block({
-      hash: req.body.hash,
-      prevHash: req.body.prevHash,
-      cost: req.body.cost,
-      firstName: req.body.firstName,
-      lastName: req.body.lastName,
-      date: req.body.date
-    });
-
     if (!errors.isEmpty()) {
       // There are errors. Render form again with sanitized values/error messages.
 
@@ -181,22 +182,46 @@ exports.block_create_post = [
           return next(err);
         }
 
+        var block = new Block();
+        block.firstName = req.body.firstName;
+        block.lastName = req.body.lastName;
+        block.cost = req.body.cost;
+        block.date = req.body.date;
+
         res.render("block_form", {
           hash: "Create Block",
           block: block,
           errors: errors.array()
         });
       });
+
       return;
     } else {
-      // Data from form is valid. Save block.
-      block.save(function(err) {
-        if (err) {
-          return next(err);
+      Block.find({}).then(blocks => {
+        for (i = 0; i <= blocks.length - 1; i++) {
+          block_chain.chain.push(blocks[i]);
         }
-        // Successful - redirect to new block record.
-        res.redirect(block.url);
       });
+      if (block_chain.isEmpty()) {
+        block_chain.addNewBlock(
+          null,
+          req.body.firstName,
+          req.body.lastName,
+          req.body.cost,
+          req.body.date
+        );
+      } else {
+        block_chain.addNewBlock(
+          block_chain.lastBlock().hash,
+          req.body.firstName,
+          req.body.lastName,
+          req.body.cost,
+          req.body.date
+        );
+      }
+
+      // Successful - save new block, redirect to new block record.
+      res.redirect("/catalog/block/create");
     }
   }
 ];
@@ -242,6 +267,7 @@ exports.block_delete_post = function(req, res, next) {
       }
       // Success
       else {
+
         Block.findByIdAndRemove(req.body.id, function deleteBlock(err) {
           if (err) {
             return next(err);
@@ -282,28 +308,24 @@ exports.block_update_get = function(req, res, next) {
 // Handle block update on POST.
 exports.block_update_post = [
   // Validate fields.
-  body("hash", "Hash must not be empty.")
+  body("cost", "Cost must be a number")
     .isLength({ min: 1 })
+    .isFloat()
     .trim(),
-  body("prevHash", "prevHash must not be empty.")
+  body("firstName", "First name must be letters only")
     .isLength({ min: 1 })
+    .isAlpha()
     .trim(),
-  body("cost", "Cost must not be empty")
+  body("lastName", "Last name must be letters only")
     .isLength({ min: 1 })
+    .isAlpha()
     .trim(),
-  body("firstName", "First name must not be empty")
+  body("date", "Date must be MM-DD-YYYY")
     .isLength({ min: 1 })
-    .trim(),
-  body("lastName", "Last name must not be empty")
-    .isLength({ min: 1 })
-    .trim(),
-  body("date", "Date must not be empty")
-    .isLength({ min: 1 })
+    .matches(/^(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1])-([0-9]{4})$/)
     .trim(),
 
   // Sanitize fields.
-  sanitizeBody("hash").escape(),
-  sanitizeBody("prevHash").escape(),
   sanitizeBody("cost").escape(),
   sanitizeBody("firstName").escape(),
   sanitizeBody("lastName").escape(),
@@ -317,8 +339,6 @@ exports.block_update_post = [
     // Create a Block object with escaped/trimmed data and old id.
     var block = new Block({
       _id: req.params.id,
-      hash: req.body.hash,
-      prevHash: req.body.prevHash,
       cost: req.body.cost,
       firstName: req.body.firstName,
       lastName: req.body.lastName,

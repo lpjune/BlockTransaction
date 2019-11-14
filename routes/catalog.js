@@ -7,7 +7,7 @@ var block_controller = require("../controllers/blockController");
 /// BOOK ROUTES ///
 
 // GET catalog home page.
-router.get("/", block_controller.block_list);
+router.get("/", block_controller.block_list_index);
 
 // GET request for creating a Block. NOTE This must come before routes that display Block (uses id).
 router.get("/block/create", block_controller.block_create_get);

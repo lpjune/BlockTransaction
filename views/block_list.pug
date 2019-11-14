@@ -1,16 +1,20 @@
 extends layout
 
 block content
-  div.row.justify-content-between
+  div.row.justify-content-left
     for block in block_list
-      div.col-auto(style="margin-bottom: 40px;")
-        div.card.h-100(style="width: 15rem")
-          h5.card-header
-            | Card Title 
-            a.btn.btn-light.fas.fa-cog.float-right(href=block.url)
-          div.card-body
-            p.no-space Name: #{block.name}
-            p.no-space Hash: #{block.hash}
-            p.no-space Prev Hash: #{block.prevHash}
-            p.no-space Cost: #{block.cost}
-          div.card-footer.text-muted #{block.date}
+      -if(block.hidden == false) 
+        div.col-auto(style="margin-bottom: 40px;")
+          div.card.h-100(style="width: 15rem")
+            h5.card-header
+              | Transaction
+              a.btn.btn-light.fas.fa-cog.float-right(href=block.url)
+            div.card-body
+              p.no-space Name: #{block.name}
+              p.no-space Hash: #{block.hash}
+              p.no-space Prev Hash: #{block.prevHash}
+              p.no-space Cost: #{block.cost}
+            div.card-footer.text-muted #{block.date}
+      -else
+        continue
+        
