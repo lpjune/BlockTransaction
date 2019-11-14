@@ -262,7 +262,7 @@ exports.block_delete_post = function(req, res, next) {
     block.hidden = true;
     block.save(err => console.log(err));
   })
-  res.redirect("/catalog");
+  res.redirect("/");
 };
 
 // Display block update form on GET.

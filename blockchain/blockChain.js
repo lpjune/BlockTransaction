@@ -47,6 +47,7 @@ class BlockChain {
   }
 
   lastBlock() {
+    console.log("Last: " + this.chain.slice(-1)[0])
     return this.chain.slice(-1)[0];
   }
 
