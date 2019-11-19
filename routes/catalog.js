@@ -36,7 +36,7 @@ router.post("/block/:id/update", block_controller.block_update_post);
 router.get("/block/:id", block_controller.block_detail);
 
 // GET request for list of all Block.
-router.get("/blocks", block_controller.block_list);
+router.get("/blocks", block_controller.block_list_index);
 
 // GET request for list of all Block sorted by date
 router.get("/blocks/date", block_controller.block_list_date);
@@ -46,6 +46,9 @@ router.get("/blocks/name", block_controller.block_list_name);
 
 // GET request for list of all Block sorted by cost
 router.get("/blocks/cost", block_controller.block_list_cost);
+
+// GET request for list of all Block sorted by index
+router.get("/blocks/index", block_controller.block_list_index);
 
 // POST request to search Blocks
 router.post("/blocks/search", block_controller.block_list_search);
