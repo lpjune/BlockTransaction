@@ -1,38 +1,26 @@
 # Transaction Manager with Blockchain
+### Hosted at blocktransaction.herokuapp.com
 ### Mississippi State University, Software Engineering, Fall 2019
 Uses Node.js, npm, Pug.js, Express, Mongoose, Bootstrap, and MongoDB
 
 ## Requirements
 
 * [Node.js Download](https://nodejs.org/en/download/)
-* [MongoDB Atlas Create Account](https://www.mongodb.com/cloud/atlas)
-* [(Optional) GitKraken Download](https://www.gitkraken.com/download)
 
 ## Installing Node
-1. Install to default location (program files)
+1. Install to default location
 
 ## Checking Installations
 1. Open terminal
 2. Run `node -v` to check Node.js
 3. Run `npm -v` to check npm
 
-## MongoDB Set-up Steps
-1. Verify you have a MongoDB Atlas account
-2. Send me email you used to register so I can add you to the project
-3. After you've been added, make sure the Context (in top left) is Software Engineering Lab
-4. Under the clusters, click connect in the pos cluster
-5. Select Connect Your Application
-6. Leave driver as Node.js and version 3.0 or later
-7. Copy the connection string and replace <password> (deleting brackets), with your password for this database, not MongoDB
-8. At the end where it says test, replace that with Blockchain
-9. Save this string for use in installation steps
 
 ## Installation Steps
 
 1. Clone repo to your Users/username directory
 2. Use terminal to cd to repo, or open a terminal in vscode
 2. Run `npm install`
-3. Create a `.env` file in the project root and add one line: DATABASE=yourstring (string from last section, no quotes)
 5. Run `npm start`
 6. Visit http://localhost:3000 to view
 
